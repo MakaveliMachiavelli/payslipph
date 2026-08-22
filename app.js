@@ -28,15 +28,35 @@ function withholding(taxable) {
   return row.base + (taxable - row.over) * row.rate;
 }
 
-function calc(salary, rates) {
+function calc(salary, rates, opts = {}) {
   salary = salary || 0;
-  const sss = clamp(salary, rates.sssFloor, rates.sssCap) * (rates.sssPct / 100);
-  const ph = clamp(salary, PH_FLOOR, PH_CAP) * (rates.phPct / 100);
-  const pi = Math.min(salary, rates.piCap) * (rates.piPct / 100);
-  const taxable = Math.max(0, salary - sss - ph - pi);
-  const tax = withholding(taxable);
-  const ded = sss + ph + pi + tax;
-  return { salary, sss, ph, pi, tax, ded, net: salary - ded, taxable };
+  const freq = opts.freq || 'monthly';
+  const factor = freq === 'semi' ? 0.5 : 1;
+  const baseSalary = salary * factor;
+  const hourlyRate = salary / (26 * 8);           // 26 working days × 8h
+  const otPay = (opts.otHrs || 0) * hourlyRate * 1.25;
+  const allowance = opts.allowance || 0;
+  const grossEarnings = baseSalary + otPay + allowance;
+
+  // statutory shares computed on the MONTHLY MSC, scaled by pay factor
+  const sss = clamp(salary, rates.sssFloor, rates.sssCap) * (rates.sssPct / 100) * factor;
+  const ph = clamp(salary, PH_FLOOR, PH_CAP) * (rates.phPct / 100) * factor;
+  const pi = Math.min(salary, rates.piCap) * (rates.piPct / 100) * factor;
+  const taxable = Math.max(0, salary - sss / factor - ph / factor - pi / factor);
+  const tax = withholding(taxable) * factor;
+  const lates = opts.lates || 0, vale = opts.vale || 0;
+  const ded = sss + ph + pi + tax + lates + vale;
+  const net = grossEarnings - ded;
+
+  // employer cost (ER shares + ECC)
+  const erSss = (clamp(salary, rates.sssFloor, rates.sssCap) * 0.095 + 30) * factor;
+  const erPh = ph;
+  const erPi = Math.min(salary, rates.piCap) * 0.02 * factor;
+  const totalErCost = grossEarnings + erSss + erPh + erPi;
+
+  return { salary, freq, factor, baseSalary, otPay, allowance, grossEarnings,
+           sss, ph, pi, tax, lates, vale, ded, net, taxable,
+           erSss, erPh, erPi, totalErCost };
 }
 
 function rates() {
@@ -49,11 +69,15 @@ function rates() {
 function render() {
   const salary = num('eSalary');
   const months = clamp(num('eMonths'), 0, 12);
-  const c = calc(salary, rates());
+  const opts = { freq: $('payFreq') ? $('payFreq').value : 'monthly',
+    otHrs: num('eOtHrs'), allowance: num('eAllowance'), lates: num('eLate'), vale: num('eVale') };
+  const c = calc(salary, rates(), opts);
   const th13mo = salary / 12;
   const th13yr = salary * months / 12;
 
-  $('oGross').textContent = peso(c.salary);
+  $('oGross').textContent = peso(c.grossEarnings);
+  const erEl = $('oErCost');
+  if (erEl) erEl.textContent = peso(c.totalErCost);
   $('oDed').textContent = peso(c.ded);
   $('oNet').textContent = peso(c.net);
   $('o13').textContent = peso(th13mo);
@@ -64,15 +88,24 @@ function render() {
   $('p_date').textContent = 'Date: ' + new Date().toISOString().slice(0, 10);
   $('p_name').textContent = $('eName').value || '—';
   $('p_pos').textContent = $('ePos').value || '—';
-  $('p_basic').textContent = peso(c.salary);
+  $('p_basic').textContent = peso(c.baseSalary);
+  const otEl = $('p_ot');
+  if (otEl) { otEl.parentElement.style.display = c.otPay > 0 ? '' : 'none'; otEl.textContent = peso(c.otPay); }
+  const alEl = $('p_allow');
+  if (alEl) { alEl.parentElement.style.display = c.allowance > 0 ? '' : 'none'; alEl.textContent = peso(c.allowance); }
+  const lateEl = $('p_late'), valeEl = $('p_vale');
+  if (lateEl) { lateEl.parentElement.style.display = c.lates > 0 ? '' : 'none'; lateEl.textContent = peso(c.lates); }
+  if (valeEl) { valeEl.parentElement.style.display = c.vale > 0 ? '' : 'none'; valeEl.textContent = peso(c.vale); }
   $('p_13').textContent = peso(th13mo);
   $('p_sss').textContent = peso(c.sss);
   $('p_ph').textContent = peso(c.ph);
   $('p_pi').textContent = peso(c.pi);
   $('p_tax').textContent = peso(c.tax);
-  $('p_gross').textContent = peso(c.salary + th13mo);
+  $('p_gross').textContent = peso(c.grossEarnings + th13mo * c.factor);
   $('p_ded').textContent = peso(c.ded);
-  $('p_net').textContent = peso(c.net + th13mo);
+  $('p_net').textContent = peso(c.net + th13mo * c.factor);
+  const erFoot = $('p_er');
+  if (erFoot) erFoot.textContent = 'Employer total cost this period (incl. ER shares + ECC): ' + peso(c.totalErCost);
 
   saveDraft();
 }
@@ -154,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadDraft();
   applyPro();
 
-  ['eName', 'ePos', 'ePeriod', 'eCo', 'eSalary', 'eMonths', 'rSss', 'rPh', 'rPi', 'rPiCap', 'rSssFloor', 'rSssCap']
+  ['eName', 'ePos', 'ePeriod', 'eCo', 'eSalary', 'eMonths', 'rSss', 'rPh', 'rPi', 'rPiCap', 'rSssFloor', 'rSssCap', 'payFreq', 'eOtHrs', 'eAllowance', 'eLate', 'eVale']
     .forEach(id => $(id).addEventListener('input', render));
 
   $('printBtn').addEventListener('click', () => window.print());

@@ -52,21 +52,35 @@
           <label>Pay period <input id="ePeriod" placeholder="Aug 1–31, 2026"></label>
         </div>
         <label>Company name (on payslip) <input id="eCo" placeholder="RRD General Merchandise"></label>
-        <label>Monthly basic salary (₱) <input id="eSalary" type="number" min="0" step="any" value="25000"></label>
+        <div class="fields three">
+        <label>Pay frequency
+          <select id="payFreq">
+            <option value="monthly" selected>Monthly</option>
+            <option value="semi">Semi-monthly (15th / 30th)</option>
+          </select>
+        </label>
+        <label>Overtime hours (125%) <input id="eOtHrs" type="number" min="0" step="0.5" value="0"></label>
+        <label>Non-taxable allowance (₱) <input id="eAllowance" type="number" min="0" step="any" value="0"></label>
+      </div>
+      <div class="fields three">
+        <label>Late / tardiness deduction (₱) <input id="eLate" type="number" min="0" step="any" value="0"></label>
+        <label>Cash advance / vale (₱) <input id="eVale" type="number" min="0" step="any" value="0"></label>
+      </div>
+<label>Monthly basic salary (₱) <input id="eSalary" type="number" min="0" step="any" value="25000"></label>
         <label>Months worked this year (for 13th month) <input id="eMonths" type="number" min="0" max="12" step="1" value="12"></label>
       </div>
 
       <h2 class="mt">Statutory rates <span class="tiny">(editable — defaults follow current tables)</span></h2>
       <div class="fields four">
-        <label>SSS EE % <input id="rSss" type="number" step="any" value="3.63"></label>
-        <label>PhilHealth EE % <input id="rPh" type="number" step="any" value="1.25"></label>
-        <label>Pag-IBIG EE % <input id="rPi" type="number" step="any" value="1"></label>
-        <label>Pag-IBIG MSC cap <input id="rPiCap" type="number" step="any" value="5000"></label>
+        <label>SSS EE % <input id="rSss" type="number" step="any" value="4.5"></label>
+        <label>PhilHealth EE % <input id="rPh" type="number" step="any" value="2.5"></label>
+        <label>Pag-IBIG EE % <input id="rPi" type="number" step="any" value="2"></label>
+        <label>Pag-IBIG MSC cap <input id="rPiCap" type="number" step="any" value="10000"></label>
       </div>
       <p class="hint">Defaults: SSS employee share 3.63% of MSC (floor ₱5,000 / cap ₱34,999 → editable below), PhilHealth 1.25% employee (₱10k–100k MSC), Pag-IBIG 1% capped. <strong>Always verify against the latest official tables.</strong></p>
       <div class="fields two">
         <label>SSS MSC floor (₱) <input id="rSssFloor" type="number" step="any" value="5000"></label>
-        <label>SSS MSC cap (₱) <input id="rSssCap" type="number" step="any" value="34999"></label>
+        <label>SSS MSC cap (₱) <input id="rSssCap" type="number" step="any" value="35000"></label>
       </div>
 
       <div class="actions">
@@ -85,6 +99,7 @@
         <div class="stat"><div class="stat-l">TOTAL DEDUCTIONS</div><div class="stat-v neg" id="oDed">—</div></div>
         <div class="stat hi"><div class="stat-l">NET PAY</div><div class="stat-v" id="oNet">—</div></div>
         <div class="stat hi2"><div class="stat-l">13TH MONTH (accrued/mo)</div><div class="stat-v" id="o13">—</div></div>
+          <div class="stat"><div class="stat-l">EMPLOYER TOTAL COST</div><div class="stat-v" id="oErCost">—</div></div>
       </div>
       <div class="muted-line" id="o13Year"></div>
 
@@ -107,8 +122,10 @@
           <thead><tr><th>EARNINGS</th><th class="r">AMOUNT</th><th>DEDUCTIONS</th><th class="r">AMOUNT</th></tr></thead>
           <tbody>
             <tr><td>Basic salary</td><td class="r" id="p_basic">—</td><td>SSS</td><td class="r" id="p_sss">—</td></tr>
-            <tr><td>13th month (pro-rated this period)</td><td class="r" id="p_13">—</td><td>PhilHealth</td><td class="r" id="p_ph">—</td></tr>
-            <tr><td></td><td class="r"></td><td>Pag-IBIG</td><td class="r" id="p_pi">—</td></tr>
+            <tr id="otRow" style="display:none"><td>Overtime pay</td><td class="r" id="p_ot">—</td><td>PhilHealth</td><td class="r" id="p_ph">—</td></tr>
+            <tr id="allowRow" style="display:none"><td>Allowance (non-tax)</td><td class="r" id="p_allow">—</td><td>Pag-IBIG</td><td class="r" id="p_pi">—</td></tr>
+            <tr><td>13th month (pro-rated this period)</td><td class="r" id="p_13">—</td><td>Lates / tardiness</td><td class="r" id="p_late" style="display:none">—</td></tr>
+            <tr><td></td><td class="r"></td><td>Vale / cash advance</td><td class="r" id="p_vale" style="display:none">—</td></tr>
             <tr><td></td><td class="r"></td><td>Withholding tax</td><td class="r" id="p_tax">—</td></tr>
             <tr class="ps-tot"><td><strong>GROSS</strong></td><td class="r"><strong id="p_gross">—</strong></td><td><strong>TOTAL DED</strong></td><td class="r"><strong id="p_ded">—</strong></td></tr>
           </tbody>
@@ -180,7 +197,8 @@
     <button class="modal-x" id="batchClose">✕</button>
     <h2>👥 Staff list &amp; batch payslips</h2>
     <p class="hint">Fill the form on the left, press “Save employee” to add. “Print all” produces one payslip per page.</p>
-    <table class="book-table"><thead><tr><th>Name</th><th>Position</th><th class="r">Basic</th><th class="r">Net</th><th></th></tr></thead><tbody id="batchBody"></tbody></table>
+    <table class="book-table"><thead><tr><th>Name</th><th>Position</th><th class="r">Basic</th><th class="r">Net</th><th></th></tr></thead><tbody id="batchBody"></tbody>
+          <tfoot><tr><td colspan="2" id="p_er" style="font-size:.7rem;color:#667085"></td></tr></tfoot></table>
     <div class="actions">
       <button id="batchPrint" class="btn primary">🖨️ Print all payslips</button>
       <button id="batchCsv" class="btn">⬇️ Export payroll CSV</button>
