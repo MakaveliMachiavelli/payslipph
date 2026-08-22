@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" fill="#ffffff"/>
+  <rect x="8" y="8" width="164" height="164" fill="none" stroke="#0369a1" stroke-width="3" stroke-dasharray="8 5"/>
+  <g fill="#0369a1" font-family="Arial" text-anchor="middle">
+    <text x="90" y="70" font-size="15" font-weight="bold">REPLACE WITH</text>
+    <text x="90" y="92" font-size="20" font-weight="bold">GCash QR</text>
+    <text x="90" y="115" font-size="10">(assets/gcash-qr.svg)</text>
+    <text x="90" y="132" font-size="10">see PAYMENTS.md</text>
+  </g>
+</svg>
