@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free 13th Month Pay &amp; Payslip Generator Philippines — PayslipPH</title>
+<link rel="manifest" href="manifest.json">
 <meta name="description" content="Compute 13th month pay, SSS, PhilHealth, Pag-IBIG and withholding tax, then print a clean payslip — free, no signup. Built for Philippine small businesses and employers.">
 <meta property="og:title" content="PayslipPH — PH Payroll & Payslip Generator">
 <meta property="og:description" content="Free PH payslip generator: SSS, PhilHealth, Pag-IBIG, TRAIN tax, semi-monthly, employer cost. PRO ₱149 for batch + CSV export.">
@@ -249,5 +250,11 @@
 
 <div id="batchDocs"></div>
 <script src="app.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+</script>
 </body>
 </html>
