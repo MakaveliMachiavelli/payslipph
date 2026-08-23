@@ -2,7 +2,7 @@
 'use strict';
 
 /* PRO unlock codes. OWNER: change before promoting (see PAYMENTS.md). */
-const PRO_CODES = ['PAYSLIP-PH-149', 'PSP-DEMO'];
+const PRO_CODES = ['PP-PRO-0345DD0E7949', 'DEMO'];
 const LS = { draft: 'psp_draft', pro: 'psp_pro', staff: 'psp_staff' };
 
 /* TRAIN monthly withholding tax table (R.A. 10963) */
