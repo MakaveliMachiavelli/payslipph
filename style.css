@@ -1,6 +1,6 @@
 /* PayslipPH — styles */
 :root{
-  --blue:#0369a1; --ink:#101828; --muted:#667085; --line:#e4e7ec;
+  --blue:#0369a1; --ink:#101828; --muted:#3d4a5c; --line:#e4e7ec;
   --bg:#f2f7fb; --card:#fff; --green:#0e9f6e; --red:#dc2626;
 }
 *{box-sizing:border-box}
