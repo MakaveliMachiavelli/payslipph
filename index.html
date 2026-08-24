@@ -1,219 +1,143 @@
 <!DOCTYPE html>
 <html data-theme="payslipph" lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free 13th Month Pay &amp; Payslip Generator Philippines — PayslipPH</title>
-<meta name="description" content="Compute 13th month pay, SSS, PhilHealth, Pag-IBIG and withholding tax, then print a clean payslip — free, no signup. Built for Philippine small businesses and employers.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230369a1'/%3E%3Ctext x='32' y='44' font-size='30' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3E13%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" <link rel="stylesheet" href="https://makavelimachiavelli.github.io/zinvent-design-system/tokens.css">
-    <link rel="stylesheet" href="https://makavelimachiavelli.github.io/zinvent-design-system/components/base.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayslipPH — Philippine Payslip Generator (DOLE Compliant)</title>
+  <meta name="description" content="Generate DOLE-compliant payslips with SSS, PhilHealth, Pag-IBIG, and TRAIN tax. Batch CSV upload. Free for single, PRO for batch.">
+  <link rel="canonical" href="https://makavelimachiavelli.github.io/payslipph/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231a2332'/%3E%3Ctext x='32' y='44' font-size='32' text-anchor='middle' fill='%23e8b43c' font-family='Georgia' font-weight='bold'%3E₱%3C/text%3E%3C/svg%3E">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Zinvent Design System -->
+  <link rel="stylesheet" href="https://makavelimachiavelli.github.io/zinvent-design-system/tokens.css">
+  <link rel="stylesheet" href="https://makavelimachiavelli.github.io/zinvent-design-system/components/base.css">
   <!-- Zinvent Analytics (privacy-first, no cookies) -->
   <script src="https://makavelimachiavelli.github.io/zinvent-design-system/components/analytics.js"></script>
   <!-- Zinvent Payments (GCash + LemonSqueezy, affiliate, email capture) -->
   <script src="https://makavelimachiavelli.github.io/zinvent-design-system/components/payments.js"></script>
-    <link rel="stylesheet" href="style.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type":"Question","name":"How is 13th month pay computed in the Philippines?","acceptedAnswer":{"@type":"Answer","text":"13th month pay = total basic salary earned within the calendar year ÷ 12. Only basic salary counts — not allowances, overtime, commissions, or bonuses. It must be paid on or before December 24."}},
-    {"@type":"Question","name":"What deductions appear on a Philippine payslip?","acceptedAnswer":{"@type":"Answer","text":"Typically SSS, PhilHealth, and Pag-IBIG employee shares, plus withholding income tax (TRAIN monthly brackets). Rates on this calculator are editable so you can match the latest official tables."}},
-    {"@type":"Question","name":"Is this payslip generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes — unlimited single-employee payslips and 13th month computations are free. PRO (₱149 one-time) adds multi-employee batch mode, saved payroll records and CSV export."}}
-  ]
-}
-</script>
+  <!-- Product Styles -->
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"PayslipPH","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"PHP"},"description":"DOLE-compliant payslip generator for Philippine employers."}
+  </script>
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to main content</a>>
-
-<header class="site-header">
-  <div class="brand">Payslip<span>PH</span></div>
-  <nav>
-    <span id="proBadge" class="badge hidden">PRO</span>
-    <a href="#faq">FAQ</a>
-    <button id="proBtn" class="btn-link">Get PRO — ₱149</button>
-  </nav>
-</header>
-
-<main class="wrap">
-  <section class="hero">
-    <h1>13th Month Pay + Complete Payslip, in 1 Minute</h1>
-    <p class="sub">Type the salary → get SSS, PhilHealth, Pag-IBIG, withholding tax, 13th month, and net pay — then print a clean payslip. Free, no signup, works offline. Built for <strong>Philippine small businesses</strong>.</p>
-    <div class="hero-chips">
-      <span>✓ 13th month = basic ÷ 12</span>
-      <span>✓ TRAIN withholding tax</span>
-      <span>✓ Editable SSS/PhilHealth/Pag-IBIG rates</span>
-      <span>✓ Printable payslip</span>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="z-header" role="banner">
+    <div class="z-header-inner">
+      <div class="z-brand"><span class="z-brand-mark">📄</span><span class="z-brand-name">PayslipPH</span></div>
+      <nav class="z-nav" role="navigation" aria-label="Main navigation">
+        <a href="#single">Single</a>
+        <a href="#batch">Batch</a>
+        <a href="#pro">PRO</a>
+        <a href="https://makavelimachiavelli.github.io/zinvent-hub/" class="z-btn z-btn-ghost z-btn-sm">All Tools</a>
+      </nav>
     </div>
-  </section>
-
-  <div class="app-grid">
-    <section class="panel">
-      <h2>Employee</h2>
-      <div class="fields">
-        <label>Employee name <input id="eName" placeholder="Maria S. Santos"></label>
-        <div class="fields two">
-          <label>Position <input id="ePos" placeholder="Cashier"></label>
-          <label>Pay period <input id="ePeriod" placeholder="Aug 1–31, 2026"></label>
-        </div>
-        <label>Company name (on payslip) <input id="eCo" placeholder="RRD General Merchandise"></label>
-        <div class="fields three">
-        <label>Pay frequency
-          <select id="payFreq">
-            <option value="monthly" selected>Monthly</option>
-            <option value="semi">Semi-monthly (15th / 30th)</option>
-          </select>
-        </label>
-        <label>Overtime hours (125%) <input id="eOtHrs" type="number" min="0" step="0.5" value="0"></label>
-        <label>Non-taxable allowance (₱) <input id="eAllowance" type="number" min="0" step="any" value="0"></label>
+  </header>
+  <main id="main" role="main">
+    <section class="z-hero z-reveal">
+      <span class="z-hero-eyebrow">DOLE-Compliant Payslips</span>
+      <h1>Accurate payslips. Zero manual computation.</h1>
+      <p>SSS, PhilHealth, Pag-IBIG, withholding tax (TRAIN), 13th month — all auto-computed. Single or batch CSV upload.</p>
+      <div class="z-hero-cta">
+        <button class="z-btn z-btn-primary z-btn-lg" data-action="single">Generate Single</button>
+        <a href="#batch" class="z-btn z-btn-ghost z-btn-lg">Batch Upload</a>
       </div>
-      <div class="fields three">
-        <label>Late / tardiness deduction (₱) <input id="eLate" type="number" min="0" step="any" value="0"></label>
-        <label>Cash advance / vale (₱) <input id="eVale" type="number" min="0" step="any" value="0"></label>
+      <div class="z-pills">
+        <span class="z-pill">SSS/PhilHealth/Pag-IBIG</span>
+        <span class="z-pill">TRAIN Tax Table</span>
+        <span class="z-pill">13th Month</span>
+        <span class="z-pill">CSV Batch</span>
       </div>
-<label>Monthly basic salary (₱) <input id="eSalary" type="number" min="0" step="any" value="25000"></label>
-        <label>Months worked this year (for 13th month) <input id="eMonths" type="number" min="0" max="12" step="1" value="12"></label>
-      </div>
-
-      <h2 class="mt">Statutory rates <span class="tiny">(editable — defaults follow current tables)</span></h2>
-      <div class="fields four">
-        <label>SSS EE % <input id="rSss" type="number" step="any" value="4.5"></label>
-        <label>PhilHealth EE % <input id="rPh" type="number" step="any" value="2.5"></label>
-        <label>Pag-IBIG EE % <input id="rPi" type="number" step="any" value="2"></label>
-        <label>Pag-IBIG MSC cap <input id="rPiCap" type="number" step="any" value="10000"></label>
-      </div>
-      <p class="hint">Defaults: SSS employee share 3.63% of MSC (floor ₱5,000 / cap ₱34,999 → editable below), PhilHealth 1.25% employee (₱10k–100k MSC), Pag-IBIG 1% capped. <strong>Always verify against the latest official tables.</strong></p>
-      <div class="fields two">
-        <label>SSS MSC floor (₱) <input id="rSssFloor" type="number" step="any" value="5000"></label>
-        <label>SSS MSC cap (₱) <input id="rSssCap" type="number" step="any" value="35000"></label>
-      </div>
-
-      <div class="actions">
-        <button id="printBtn" class="btn primary">🖨️ Print payslip</button>
-        <button id="saveEmpBtn" class="btn hidden">👤 Save employee (PRO)</button>
-        <button id="batchBtn" class="btn hidden">👥 Batch payslips (PRO)</button>
-      </div>
-      <p class="hint">PRO: save your staff list, print all payslips in one go, export payroll CSV.</p>
     </section>
 
-    <section class="panel">
-      <h2 class="preview-title">Computation &amp; payslip</h2>
-
-      <div class="stat-row">
-        <div class="stat"><div class="stat-l">GROSS (monthly)</div><div class="stat-v" id="oGross">—</div></div>
-        <div class="stat"><div class="stat-l">TOTAL DEDUCTIONS</div><div class="stat-v neg" id="oDed">—</div></div>
-        <div class="stat hi"><div class="stat-l">NET PAY</div><div class="stat-v" id="oNet">—</div></div>
-        <div class="stat hi2"><div class="stat-l">13TH MONTH (accrued/mo)</div><div class="stat-v" id="o13">—</div></div>
-          <div class="stat"><div class="stat-l">EMPLOYER TOTAL COST</div><div class="stat-v" id="oErCost">—</div></div>
-      </div>
-      <div class="muted-line" id="o13Year"></div>
-
-      <div id="doc" class="payslip-doc">
-        <div class="ps-head">
-          <div>
-            <div class="ps-co" id="p_co">RRD General Merchandise</div>
-            <div class="ps-sub">PAYSLIP</div>
+    <section id="single" class="z-section z-reveal">
+      <div class="z-wrap">
+        <h2>Single Payslip</h2>
+        <div class="z-card" style="padding:var(--z-s5);">
+          <div class="z-grid-2" style="margin-bottom:var(--z-s4);">
+            <div>
+              <label class="z-label">Employee Name</label>
+              <input type="text" class="z-input" id="empName" placeholder="Juan Dela Cruz">
+            </div>
+            <div>
+              <label class="z-label">Pay Period</label>
+              <input type="month" class="z-input" id="payPeriod">
+            </div>
+            <div>
+              <label class="z-label">Basic Salary (₱)</label>
+              <input type="number" class="z-input" id="basicSalary" placeholder="25000" min="0" step="0.01">
+            </div>
+            <div>
+              <label class="z-label">Pay Frequency</label>
+              <select class="z-input" id="payFreq"><option value="monthly">Monthly</option><option value="semi">Semi-monthly</option></select>
+            </div>
+            <div>
+              <label class="z-label">OT Hours</label>
+              <input type="number" class="z-input" id="otHrs" placeholder="0" min="0" step="0.5">
+            </div>
+            <div>
+              <label class="z-label">Allowances (₱)</label>
+              <input type="number" class="z-input" id="allowance" placeholder="0" min="0" step="0.01">
+            </div>
           </div>
-          <div class="ps-meta">
-            <div id="p_period">Period: —</div>
-            <div id="p_date">Date: —</div>
-          </div>
+          <button class="z-btn z-btn-primary" data-action="genSingle">Generate Payslip</button>
+          <div id="singleResult" class="z-result" style="margin-top:var(--z-s4);display:none;"></div>
         </div>
-        <div class="ps-emp">
-          <div><span class="ps-l">Employee:</span> <span id="p_name">Maria S. Santos</span></div>
-          <div><span class="ps-l">Position:</span> <span id="p_pos">Cashier</span></div>
-        </div>
-        <table class="ps-table">
-          <thead><tr><th>EARNINGS</th><th class="r">AMOUNT</th><th>DEDUCTIONS</th><th class="r">AMOUNT</th></tr></thead>
-          <tbody>
-            <tr><td>Basic salary</td><td class="r" id="p_basic">—</td><td>SSS</td><td class="r" id="p_sss">—</td></tr>
-            <tr id="otRow" style="display:none"><td>Overtime pay</td><td class="r" id="p_ot">—</td><td>PhilHealth</td><td class="r" id="p_ph">—</td></tr>
-            <tr id="allowRow" style="display:none"><td>Allowance (non-tax)</td><td class="r" id="p_allow">—</td><td>Pag-IBIG</td><td class="r" id="p_pi">—</td></tr>
-            <tr><td>13th month (pro-rated this period)</td><td class="r" id="p_13">—</td><td>Lates / tardiness</td><td class="r" id="p_late" style="display:none">—</td></tr>
-            <tr><td></td><td class="r"></td><td>Vale / cash advance</td><td class="r" id="p_vale" style="display:none">—</td></tr>
-            <tr><td></td><td class="r"></td><td>Withholding tax</td><td class="r" id="p_tax">—</td></tr>
-            <tr class="ps-tot"><td><strong>GROSS</strong></td><td class="r"><strong id="p_gross">—</strong></td><td><strong>TOTAL DED</strong></td><td class="r"><strong id="p_ded">—</strong></td></tr>
-          </tbody>
-        </table>
-        <div class="ps-net"><span>NET PAY THIS PERIOD</span><span id="p_net">—</span></div>
-        <div class="ps-sign">
-          <div>Received by: ____________________</div>
-          <div>Authorized by: ____________________</div>
-        </div>
-        <div class="ps-foot">13th month pay shown = accrued portion (basic ÷ 12). Statutory shares per rates configured by employer. Verify with SSS/PhilHealth/Pag-IBIG/BIR official tables.</div>
       </div>
     </section>
-  </div>
 
-  <section class="marketing">
-    <h2>Why employers use PayslipPH</h2>
-    <div class="cards">
-      <div class="card"><h3>🎯 One screen, whole payroll math</h3><p>13th month formula (basic ÷ 12), TRAIN withholding brackets, SSS/PhilHealth/Pag-IBIG shares — computed together, not scattered across five tabs.</p></div>
-      <div class="card"><h3>🔒 No signup, no server</h3><p>Payslips contain sensitive data. This runs 100% in your browser; nothing is uploaded, ever.</p></div>
-      <div class="card"><h3>🖨️ Print-ready payslip</h3><p>Clean layout with earnings/deductions sides, net pay, and signature lines — print or save as PDF per employee.</p></div>
+    <section id="batch" class="z-section z-reveal">
+      <div class="z-wrap">
+        <h2>Batch Payslips (PRO)</h2>
+        <div class="z-card" style="padding:var(--z-s5);text-align:center;">
+          <p style="color:var(--p-muted);margin-bottom:var(--z-s4);">Upload CSV with employee data → get ZIP of PDF payslips.</p>
+          <input type="file" class="z-input" accept=".csv" id="batchFile" style="display:none;">
+          <button class="z-btn z-btn-secondary" onclick="document.getElementById('batchFile').click()">Choose CSV</button>
+          <p id="batchInfo" style="color:var(--p-muted);font-size:14px;margin-top:var(--z-s2);">Requires PRO unlock</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="pro" class="z-section z-reveal">
+      <div class="z-wrap" style="text-align:center;">
+        <h2>Unlock PRO — ₱149 one-time</h2>
+        <p style="max-width:600px;margin:0 auto var(--z-s5);color:var(--p-muted);">Batch CSV → ZIP of PDFs, staff registry, historical rates, and BIR form 2316 pre-fill.</p>
+        <div class="z-qr" role="region" aria-label="GCash payment">
+          <img src="qr-gcash.svg" alt="GCash QR for PayslipPH PRO" loading="lazy">
+          <ol class="z-qr-steps">
+            <li><b>Scan QR</b> with GCash app</li>
+            <li><b>Pay ₱149</b> (one-time, no subscription)</li>
+            <li><b>Enter unlock code</b> received via SMS/email</li>
+          </ol>
+        </div>
+        <div class="z-code-row">
+          <input type="text" class="z-input" id="proCode" placeholder="Enter unlock code" style="flex:1;text-transform:uppercase;">
+          <button class="z-btn z-btn-accent" id="btnUnlock">Unlock PRO</button>
+        </div>
+        <p id="codeMsg" class="z-code-msg" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="z-section-sm z-reveal">
+      <div class="z-wrap" style="text-align:center;">
+        <p style="color:var(--p-muted);">DOLE DO 174-17 compliant · Built by <a href="https://makavelimachiavelli.github.io/zinvent-hub/">Zinvent</a></p>
+      </div>
+    </section>
+  </main>
+  <footer class="z-footer" role="contentinfo">
+    <div class="z-wrap">
+      <p>&copy; 2025 PayslipPH · <a href="https://makavelimachiavelli.github.io/zinvent-hub/privacy.html">Privacy</a> · <a href="https://makavelimachiavelli.github.io/zinvent-hub/terms.html">Terms</a></p>
+      <div class="z-footer-links">
+        <a href="https://github.com/MakaveliMachiavelli/payslipph">GitHub</a>
+        <a href="mailto:support@zinvent.ph">Support</a>
+        <a href="https://makavelimachiavelli.github.io/zinvent-hub/">All Zinvent Tools</a>
+      </div>
     </div>
-
-    <h2 id="faq">FAQ</h2>
-    <div class="faq-item"><h3>Is 13th month pay taxable?</h3><p>13th month pay and other benefits up to ₱90,000 are tax-exempt under TRAIN. Amounts beyond that join taxable compensation. This tool shows the accrued 13th month line separately so you can decide.</p></div>
-    <div class="faq-item"><h3>Why are the rates editable?</h3><p>Statutory tables change (SSS MSC brackets, PhilHealth premium phases). Defaults follow current published rates, but you should always match your latest official contribution schedule — one edit, all computations update.</p></div>
-    <div class="faq-item"><h3>Does it handle semi-monthly pay?</h3><p>The payslip is monthly; for semi-monthly runs, print two payslips and split (the tool shows monthly totals you can halve). Full semi-monthly mode is on the PRO roadmap.</p></div>
-
-    <div class="cta-box">
-      <h2>PayslipPH PRO — ₱149 one-time</h2>
-      <ul>
-        <li>👥 <strong>Staff list</strong> — save employees, load any of them in one click</li>
-        <li>🖨️ <strong>Batch payslips</strong> — print everyone's payslip in one run (one per page)</li>
-        <li>⬇️ <strong>Payroll CSV export</strong> — gross/deductions/net per employee for your records</li>
-      </ul>
-      <p class="once">One-time ₱149 via GCash. Payroll software subscriptions cost that per employee.</p>
-      <button id="proBtn2" class="btn primary big">Unlock PRO — ₱149</button>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <p>PayslipPH — free 13th month &amp; payslip generator for Philippine small businesses. Not affiliated with SSS/PhilHealth/Pag-IBIG/BIR; verify rates with official tables. · <a href="13th-month-pay-guide.html">📖 Full guide</a></p>
-</footer>
-
-<!-- PAY MODAL -->
-<div id="payModal" class="modal hidden">
-  <div class="modal-card">
-    <button class="modal-x" id="payClose">✕</button>
-    <h2>Unlock PayslipPH PRO</h2>
-    <p class="price">₱149 <span>one-time · lifetime · no subscription</span></p>
-    <div class="qr-box">
-      <img src="assets/gcash-qr.svg" alt="GCash QR (replace with merchant QR)" width="180" height="180">
-      <ol class="pay-steps">
-        <li>Scan the GCash QR and send <strong>₱149</strong>.</li>
-        <li>Enter the unlock code sent to you below.</li>
-      </ol>
-    </div>
-    <div class="code-row">
-      <input id="codeInput" placeholder="Enter unlock code">
-      <button id="codeBtn" class="btn primary">Unlock</button>
-    </div>
-    <p class="code-msg" id="codeMsg"></p>
-  </div>
-</div>
-
-<!-- BATCH MODAL (PRO) -->
-<div id="batchModal" class="modal hidden">
-  <div class="modal-card wide">
-    <button class="modal-x" id="batchClose">✕</button>
-    <h2>👥 Staff list &amp; batch payslips</h2>
-    <p class="hint">Fill the form on the left, press “Save employee” to add. “Print all” produces one payslip per page.</p>
-    <table class="book-table"><thead><tr><th>Name</th><th>Position</th><th class="r">Basic</th><th class="r">Net</th><th></th></tr></thead><tbody id="batchBody"></tbody>
-          <tfoot><tr><td colspan="2" id="p_er" style="font-size:.7rem;color:#667085"></td></tr></tfoot></table>
-    <div class="actions">
-      <button id="batchPrint" class="btn primary">🖨️ Print all payslips</button>
-      <button id="batchCsv" class="btn">⬇️ Export payroll CSV</button>
-    </div>
-  </div>
-</div>
-
-<div id="batchDocs"></div>
-<script src="app.js"></script>
+  </footer>
+  <script src="app.js"></script>
 </body>
 </html>
